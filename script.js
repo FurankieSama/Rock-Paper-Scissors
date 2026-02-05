@@ -1,4 +1,4 @@
-// GetComputerChoice: Chooses between three options 
+// etComputerChoice: Chooses between three options 
 // Rock Paper, and Scissors
 function getComputerChoice() {
     // F*ck it, I'm using an array because it's more efficient
