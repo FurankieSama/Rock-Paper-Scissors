@@ -15,3 +15,31 @@ function getHumanChoice() {
     return humanChoice;
 }
 
+// Global variables for holding scores
+let humanScore = 0
+let computerScore = 0
+
+
+// playRound: Play a round of the game
+function playRound(playerChoice, computerChoice) {
+
+    // Ensure player choice matches
+    let ensureMatch = (playerChoice === "rock") || (playerChoice === "paper") || (playerChoice === "scissors")
+    if (!ensureMatch) {
+        console.log("Invalid entry")
+        return
+    }
+    // Simple boolean to check winner
+    let checkResult = (playerChoice === "rock" && computerChoice === "scissors") || (playerChoice === "paper" && computerChoice === "rock") || (playerChoice === "scissors" && computerChoice === "paper")
+    
+    // Compare the values
+    if (checkResult) {
+        humanScore++
+        console.log("Human wins")
+    } else if (!checkResult) {
+        computerScore++
+        console.log("Computer wins")
+    }
+}
+
+playRound(getHumanChoice(), getComputerChoice())
