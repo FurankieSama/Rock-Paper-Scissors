@@ -38,7 +38,7 @@ function playRound(playerChoice, computerChoice) {
         console.log("Human wins")
     } else if (!checkResult) {
         computerScore++
-        console.log("Computer wins")
+        console.log(`You lose ${computerChoice} beats ${playerChoice}`)
     }
 }
 
