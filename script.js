@@ -15,45 +15,67 @@ function getHumanChoice() {
   return humanChoice;
 }
 
-// Global variables for holding scores
-let humanScore = 0;
-let computerScore = 0;
+// PlayGame
+function PlayGame() {
+  // declare playRound function and global variables
+  // Global variables for holding scores
+  let humanScore = 0;
+  let computerScore = 0;
 
-// playRound: Play a round of the game
-function playRound(playerChoice, computerChoice) {
-  // format the human choice
-  const humanChoice = playerChoice.trim();
-  const computerOption = computerChoice;
+  // playRound: Play a round of the game
+  function playRound(playerChoice, computerChoice) {
+    // format the human choice
+    const humanChoice = playerChoice.trim();
+    const computerOption = computerChoice;
 
-  // Compare the human choice, but first make sure the input is correct
-  if (
-    !(
-      humanChoice === "rock" ||
-      humanChoice === "paper" ||
-      humanChoice === "scissors"
-    )
-  ) {
-    console.log("Invalid response!!");
-    return;
+    // Compare the human choice, but first make sure the input is correct
+    if (
+      !(
+        humanChoice === "rock" ||
+        humanChoice === "paper" ||
+        humanChoice === "scissors"
+      )
+    ) {
+      console.log("Invalid response!!");
+      return;
+    }
+    // Compare options chosen
+    let wager =
+      (humanChoice === "rock" && computerOption === "scissors") ||
+      (humanChoice === "paper" && computerOption === "rock") ||
+      (humanChoice === "scissors" && computerOption === "paper");
+
+    // Check if Strings are equal
+    if (computerOption === humanChoice) {
+      // Check if tie
+      console.log("It's a tie");
+      return;
+    } else if (wager) {
+      // If the human wins
+      humanScore++;
+      console.log(`Human wins: ${humanChoice} beats ${computerOption}!!!`);
+    } else {
+      computerScore++;
+      console.log(`Computer wins: ${computerOption} beats ${humanChoice}!!!`);
+    }
   }
-  // Compare options chosen
-  let wager =
-    (humanChoice === "rock" && computerOption === "scissors") ||
-    (humanChoice === "paper" && computerOption === "rock") ||
-    (humanChoice === "scissors" && computerOption === "paper");
 
-  // Check if Strings are equal
-  if (computerOption === humanChoice) {
-    // Check if tie
-    console.log("It's a tie");
-    return;
-  } else if (wager) {
-    // If the human wins
-    humanScore++;
-    console.log(`Human wins: ${humanChoice} beats ${computerOption}!!!`);
+  // loop
+  let indx = 0
+  for (let index = 0; index < 5; index++) {
+    playRound(getHumanChoice(), getComputerChoice());
+    indx++
+  }
+
+  // Print out winner
+  if (humanScore > computerScore) {
+    console.log(`You win: ${humanScore} / ${indx} times`);
+  } else if (humanScore < computerScore) {
+    console.log(`Computer wins: ${computerScore} / ${indx} times`);
   } else {
-    computerScore++;
-    console.log(`Computer wins: ${computerOption} beats ${humanChoice}!!!`);
+    console.log(`It's a tie`);
   }
 }
 
+// Call function
+PlayGame();
