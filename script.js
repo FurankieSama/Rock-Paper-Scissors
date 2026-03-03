@@ -1,81 +1,67 @@
-// GetComputerChoice: Chooses between three options for computer
-// Rock Paper, and Scissors
-function getComputerChoice() {
-  // F*ck it, I'm using an array because it's more efficient
-  // Declare array
-  const gameOptions = ["rock", "paper", "scissors"];
+// 1. Select DOM elements
+const humanScorePara = document.querySelector("#human-score");
+const computerScorePara = document.querySelector("#computer-score");
+const roundResults = document.querySelector("#round-results");
+const finalWinner = document.querySelector("#final-winner");
+const playerOption = document.querySelector(".selector");
 
-  // Return random array value
+// 2. Global State
+let humanScore = 0;
+let computerScore = 0;
+let gameOver = false;
+
+// 3. Event Listener
+playerOption.addEventListener("click", (e) => {
+  if (gameOver) return;
+
+  if (e.target.classList.contains("choice")) {
+    const humanChoice = e.target.textContent.toLowerCase().trim();
+    playRound(humanChoice, getComputerChoice());
+  }
+});
+
+function getComputerChoice() {
+  const gameOptions = ["rock", "paper", "scissors"];
   return gameOptions[Math.floor(Math.random() * gameOptions.length)];
 }
 
-// getHumanChoice: collect user input
-function getHumanChoice() {
-  let humanChoice = prompt("Enter a choice: ").toLowerCase();
-  return humanChoice;
-}
+// 4. Game Logic with DOM Updates
+function playRound(humanChoice, computerOption) {
+  let resultText = "";
 
-// PlayGame
-function PlayGame() {
-  // declare playRound function and global variables
-  // Global variables for holding scores
-  let humanScore = 0;
-  let computerScore = 0;
+  const winnerIsHuman =
+    (humanChoice === "rock" && computerOption === "scissors") ||
+    (humanChoice === "paper" && computerOption === "rock") ||
+    (humanChoice === "scissors" && computerOption === "paper");
 
-  // playRound: Play a round of the game
-  function playRound(playerChoice, computerChoice) {
-    // format the human choice
-    const humanChoice = playerChoice.trim();
-    const computerOption = computerChoice;
-
-    // Compare the human choice, but first make sure the input is correct
-    if (
-      !(
-        humanChoice === "rock" ||
-        humanChoice === "paper" ||
-        humanChoice === "scissors"
-      )
-    ) {
-      console.log("Invalid response!!");
-      return;
-    }
-    // Compare options chosen
-    let wager =
-      (humanChoice === "rock" && computerOption === "scissors") ||
-      (humanChoice === "paper" && computerOption === "rock") ||
-      (humanChoice === "scissors" && computerOption === "paper");
-
-    // Check if Strings are equal
-    if (computerOption === humanChoice) {
-      // Check if tie
-      console.log("It's a tie");
-      return;
-    } else if (wager) {
-      // If the human wins
-      humanScore++;
-      console.log(`Human wins: ${humanChoice} beats ${computerOption}!!!`);
-    } else {
-      computerScore++;
-      console.log(`Computer wins: ${computerOption} beats ${humanChoice}!!!`);
-    }
-  }
-
-  // loop
-  let indx = 0
-  for (let index = 0; index < 5; index++) {
-    playRound(getHumanChoice(), getComputerChoice());
-    indx++
-  }
-
-  // Print out winner
-  if (humanScore > computerScore) {
-    console.log(`You win: ${humanScore} / ${indx} times`);
-  } else if (humanScore < computerScore) {
-    console.log(`Computer wins: ${computerScore} / ${indx} times`);
+  if (computerOption === humanChoice) {
+    resultText = `It's a tie! You both chose ${humanChoice}.`;
+  } else if (winnerIsHuman) {
+    humanScore++;
+    resultText = `Point for you! ${humanChoice} beats ${computerOption}.`;
   } else {
-    console.log(`It's a tie`);
+    computerScore++;
+    resultText = `Point for Computer! ${computerOption} beats ${humanChoice}.`;
   }
+
+  // Update Scoreboard Text
+  humanScorePara.textContent = humanScore;
+  computerScorePara.textContent = computerScore;
+  roundResults.textContent = resultText;
+
+  // Check for ultimate winner
+  checkWinner();
 }
 
-// Call function
-PlayGame();
+function checkWinner() {
+  if (humanScore === 5 || computerScore === 5) {
+    gameOver = true;
+    if (humanScore === 5) {
+      finalWinner.textContent = "Victory! You reached 5 points first!";
+      finalWinner.style.color = "green";
+    } else {
+      finalWinner.textContent = "Game Over! The Computer beat you to 5.";
+      finalWinner.style.color = "red";
+    }
+  }
+}
